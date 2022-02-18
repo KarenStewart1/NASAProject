@@ -20,3 +20,15 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+*.map
+*.map
+*.map
+server/public/static/js/main.cf104dce.chunk.js
+server/public/static/js/main.de43edd1.chunk.js
+server/public/static/js/main.de43edd1.chunk.js.map
+server/public/static/js/runtime-main.b57d3e98.js
+server/node_modules/.package-lock.json
+server/node_modules/.package-lock.json
+server/node_modules/.package-lock.json
+server/public/asset-manifest.json
+server/public/index.html
