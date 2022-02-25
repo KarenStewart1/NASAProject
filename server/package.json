@@ -16,6 +16,7 @@
     "csv-parse": "^5.0.4",
     "express": "^4.17.2",
     "nasaproject": "file:..",
+    "pm2": "^5.2.0",
     "supertest": "^6.2.2"
   },
   "devDependencies": {
