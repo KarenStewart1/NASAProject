@@ -1,6 +1,5 @@
 // we specified port 8000 since the client is running on port 3000 and backend is runnign on 8000
 const API_URL = "http://localhost:8000";
-
 // Load planets and return as JSON.
 async function httpGetPlanets() {
   // we use fetch function that's built into our browser. it returns a promise and is an async function so we use the await keyword.
@@ -20,6 +19,7 @@ async function httpGetLaunches() {
 
 // Submit given launch data to launch system.
 async function httpSubmitLaunch(launch) {
+  // JSON.stringify(converts JS object to JSON string)
   try {
     return await fetch(`${API_URL}/launches`, {
       method: "post",
