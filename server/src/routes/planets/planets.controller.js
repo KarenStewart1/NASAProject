@@ -2,10 +2,10 @@
 // import the data from model folder
 const { getAllPlanets } = require("../../models/planets.model");
 
-function httpGetAllPlanets(req, res) {
+async function httpGetAllPlanets(req, res) {
   // returns response with http status 200 and the planets array as json
   // using return makes sure the function stops executing, and it makes the code more readable; but lot of code wont include it.
-  return res.status(200).json(getAllPlanets());
+  return res.status(200).json(await getAllPlanets());
 }
 
 // exports getAllPlanets function so it can be used by the planetsrouter

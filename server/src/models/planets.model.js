@@ -2,8 +2,7 @@ const fs = require("fs");
 const path = require("path");
 // import csv-parse npm package to parse the csv file
 const { parse } = require("csv-parse");
-// creating habitablePlanets empty array to be able to push habitable planets into it
-const habitablePlanets = [];
+const planets = require("./planets.mongo");
 
 function isHabitablePlanet(planet) {
   return (
@@ -25,9 +24,9 @@ function loadPlanetsData() {
           columns: true,
         })
       )
-      .on("data", (data) => {
+      .on("data", async (data) => {
         if (isHabitablePlanet(data)) {
-          habitablePlanets.push(data);
+          savePlanet(data);
         }
       })
       .on("error", (err) => {
@@ -35,16 +34,30 @@ function loadPlanetsData() {
         // we will use the reject function to reject when we get an error on our stream.
         reject(err);
       })
-      .on("end", () => {
-        console.log(`${habitablePlanets.length} habitable planets found!`);
+      .on("end", async () => {
+        const countPlanetsFound = (await getAllPlanets()).length;
+        console.log(`${countPlanetsFound} habitable planets found!`);
         resolve();
         // we're not passing anything in to our resolve() function to be returned when our promise resovles because instead we're setting this habitable planets array. We're just using the promise so that we know when the planets data has been succesffully loaded.
       });
   });
 }
 
-function getAllPlanets() {
-  return habitablePlanets;
+async function getAllPlanets() {
+  // second argument allows us to select which fields we want included in the response.If we want to exclude the id and version tag:
+  return await planets.find({}, { _id: 0, __v: 0 });
+}
+
+async function savePlanet(planet) {
+  try {
+    await planets.updateOne(
+      { keplerName: planet.kepler_name },
+      { keplerName: planet.kepler_name },
+      { upsert: true }
+    );
+  } catch (err) {
+    console.error(`Could not save planet ${err}`);
+  }
 }
 
 module.exports = {

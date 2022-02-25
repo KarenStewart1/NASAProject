@@ -1,16 +1,16 @@
 const {
   getAllLaunches,
-  addNewLaunch,
+  scheduleNewLaunch,
   existsLaunchWithId,
   abortLaunchByID,
 } = require("../../models/launches.model");
-const launchesRouter = require("./launches.router");
+// const launchesRouter = require("./launches.router");
 
-function httpGetAllLaunches(req, res) {
-  return res.status(200).json(getAllLaunches());
+async function httpGetAllLaunches(req, res) {
+  return res.status(200).json(await getAllLaunches());
 }
 // because we have express.json() to parse the json coming in, it will now populate the req.body parameter with that parsed object
-function httpAddNewLaunch(req, res) {
+async function httpAddNewLaunch(req, res) {
   const launch = req.body;
   if (
     !launch.mission ||
@@ -28,20 +28,28 @@ function httpAddNewLaunch(req, res) {
       error: "Invalid launch date",
     });
   }
-  addNewLaunch(launch);
+  await scheduleNewLaunch(launch);
+  console.log(launch);
   return res.status(201).json(launch);
 }
 
-function httpAbortLaunch(req, res) {
+async function httpAbortLaunch(req, res) {
   const launchId = Number(req.params.id);
-
-  if (!existsLaunchWithId(launchId)) {
+  const existsLaunch = await existsLaunchWithId(launchId);
+  if (!existsLaunch) {
     return res.status(404).json({
       error: "Launch does not exist",
     });
   }
-  const aborted = abortLaunchByID(launchId);
-  return res.status(200).json(aborted);
+  const aborted = await abortLaunchByID(launchId);
+  if (!aborted) {
+    return res.status(400).json({
+      error: "Launch not aborted",
+    });
+  }
+  return res.status(200).json({
+    ok: true,
+  });
 }
 
 module.exports = {
