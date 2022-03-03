@@ -1,8 +1,6 @@
 const launchesDatabase = require("./launches.mongo");
 const planets = require("./planets.mongo");
-
 // const launches = new Map();
-
 const DEFAULT_FLIGHT_NUMBER = 100;
 
 const launch = {
@@ -41,7 +39,6 @@ async function saveLaunch(launch) {
   });
 
   if (!planet) {
-    // node built in error class
     throw new Error("No matching planet was found");
   }
   await launchesDatabase.findOneAndUpdate(

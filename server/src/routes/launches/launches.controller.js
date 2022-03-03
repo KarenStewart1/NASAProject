@@ -4,12 +4,11 @@ const {
   existsLaunchWithId,
   abortLaunchByID,
 } = require("../../models/launches.model");
-// const launchesRouter = require("./launches.router");
 
 async function httpGetAllLaunches(req, res) {
   return res.status(200).json(await getAllLaunches());
 }
-// because we have express.json() to parse the json coming in, it will now populate the req.body parameter with that parsed object
+
 async function httpAddNewLaunch(req, res) {
   const launch = req.body;
   if (
@@ -22,31 +21,35 @@ async function httpAddNewLaunch(req, res) {
       error: "Missing required launch property",
     });
   }
+
   launch.launchDate = new Date(launch.launchDate);
+
   if (isNaN(launch.launchDate)) {
     return res.status(400).json({
       error: "Invalid launch date",
     });
   }
   await scheduleNewLaunch(launch);
-  console.log(launch);
   return res.status(201).json(launch);
 }
 
 async function httpAbortLaunch(req, res) {
   const launchId = Number(req.params.id);
   const existsLaunch = await existsLaunchWithId(launchId);
+
   if (!existsLaunch) {
     return res.status(404).json({
       error: "Launch does not exist",
     });
   }
+
   const aborted = await abortLaunchByID(launchId);
   if (!aborted) {
     return res.status(400).json({
       error: "Launch not aborted",
     });
   }
+
   return res.status(200).json({
     ok: true,
   });
