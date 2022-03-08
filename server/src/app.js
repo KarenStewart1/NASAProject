@@ -4,8 +4,6 @@ const cors = require("cors");
 const morgan = require("morgan");
 const api = require("./routes/api");
 
-// const { httpAddNewLaunch } = require("./routes/launches/launches.controller");
-
 const app = express();
 
 app.use(
@@ -25,7 +23,3 @@ app.get("/*", (req, res) => {
 });
 
 module.exports = app;
-
-// the request comes in from express  --> const app = express();
-// gets checked for the json - content type --> app.use(express.json());
-// and then goes through our express router -->app.use(planetsRouter);
