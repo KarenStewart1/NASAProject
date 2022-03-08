@@ -11,7 +11,7 @@ describe("Launches API", () => {
 
   afterAll(async () => await mongoDisconnect());
 
-  describe("Test GET /v1/launches", () => {
+  describe("Test GET /launches", () => {
     test("It should respond with 200 sucess", async () => {
       const response = await request(app)
         .get("/v1/launches")
@@ -19,6 +19,7 @@ describe("Launches API", () => {
         .expect(200);
     });
   });
+
   describe("Test POST /launch", () => {
     const completeLaunchData = {
       mission: "uss enterprise",
@@ -37,7 +38,7 @@ describe("Launches API", () => {
       target: "Kepler-62 f",
       launchDate: "zoot",
     };
-    test("It should respond with 201 success", async () => {
+    test("It should respond with 201 created", async () => {
       const response = await request(app)
         .post("/v1/launches")
         .send(completeLaunchData)
